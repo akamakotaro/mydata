@@ -1,0 +1,292 @@
+/* フライトレーダー (マッハーツール版)
+ * ダーク/ライト両対応。data-theme="dark|light" を <html> に付与して切替。
+ */
+:root[data-theme="dark"] {
+  --bg: #0b1220;
+  --surface: #121b2e;
+  --surface-2: #1a2740;
+  --text: #e8eefb;
+  --muted: #8ba0c4;
+  --border: #23324f;
+  --accent: #38bdf8;
+  --accent-2: #22d3ee;
+  --accent-ink: #04202e;
+  --map-bg: #0e1626;
+  --tile: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef3fa;
+  --text: #14263f;
+  --muted: #5b708f;
+  --border: #d8e2ef;
+  --accent: #0ea5e9;
+  --accent-2: #0284c7;
+  --accent-ink: #ffffff;
+  --map-bg: #dfe8f2;
+  --tile: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+a { color: var(--accent); }
+
+/* ---- ヘッダー ---- */
+.mt-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.mt-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+}
+.mt-logo {
+  font-size: 22px;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+}
+.mt-brandname { font-size: 16px; letter-spacing: 0.3px; }
+.mt-header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mt-cat {
+  font-size: 12px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.mt-iconbtn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.mt-iconbtn:hover { border-color: var(--accent); }
+
+/* ---- メイン ---- */
+.mt-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 20px 16px 8px;
+}
+.mt-toolhead h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+.mt-lead {
+  margin: 0 0 16px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ---- ツール本体パネル ---- */
+.fr-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+.fr-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  flex-wrap: wrap;
+}
+.fr-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.fr-status .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.fr-status.ok .dot { background: #34d399; animation: pulse 2s infinite; }
+.fr-status.err .dot { background: #f87171; }
+.fr-status.loading .dot { background: var(--accent); }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+.fr-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fr-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+.fr-switch input { accent-color: var(--accent); width: 16px; height: 16px; }
+.fr-btn {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+.fr-btn:hover { background: var(--accent-2); }
+.fr-btn:active { transform: scale(0.96); }
+
+#map {
+  height: 60vh;
+  min-height: 420px;
+  background: var(--map-bg);
+}
+
+.fr-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.fr-stats strong { color: var(--accent); font-size: 15px; }
+.fr-stats .sep { opacity: 0.4; }
+
+/* ---- 機体アイコン ---- */
+.plane-icon { color: var(--accent); transition: transform 0.5s linear; will-change: transform; }
+.plane-icon svg { display: block; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)); }
+.plane-icon.ground { color: var(--muted); opacity: 0.7; }
+.plane-icon.selected { color: var(--accent-2); filter: drop-shadow(0 0 6px var(--accent-2)); }
+
+.leaflet-tooltip.plane-tip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: none;
+}
+.leaflet-tooltip.plane-tip::before { display: none; }
+
+/* ---- 詳細パネル ---- */
+.fr-detail {
+  position: fixed;
+  top: 120px;
+  right: max(16px, calc((100vw - 1080px) / 2 + 16px));
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  z-index: 1200;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  animation: slideIn 0.2s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.fr-detail.hidden { display: none; }
+.fr-detail .close {
+  position: absolute; top: 10px; right: 12px;
+  background: none; border: none; color: var(--muted);
+  font-size: 22px; cursor: pointer; line-height: 1;
+}
+.fr-detail .close:hover { color: var(--text); }
+.fr-detail h2 {
+  margin: 0 0 6px; font-size: 22px;
+  font-family: "SF Mono", "Roboto Mono", Menlo, monospace; letter-spacing: 1px;
+}
+.fr-detail .badge {
+  display: inline-block; font-size: 11px; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 999px; padding: 3px 10px; margin-bottom: 14px;
+}
+.detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin: 0 0 16px;
+}
+.detail-grid dt { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.detail-grid dd { margin: 0; font-size: 15px; font-weight: 600; }
+.ext-link { display: inline-block; font-size: 13px; text-decoration: none; }
+.ext-link:hover { text-decoration: underline; }
+
+/* ---- 説明セクション ---- */
+.mt-about {
+  margin: 22px 0;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.mt-about h2 { margin: 0 0 10px; font-size: 18px; }
+.mt-about ul { margin: 0; padding-left: 20px; line-height: 1.8; color: var(--muted); }
+.mt-about b { color: var(--text); }
+
+/* ---- フッター ---- */
+.mt-footer {
+  padding: 20px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+}
+.mt-footer p { margin: 4px 0; }
+.mt-fineprint { font-size: 12px; opacity: 0.85; }
+
+@media (max-width: 640px) {
+  .fr-detail {
+    top: auto; bottom: 12px; right: 8px; left: 8px; width: auto;
+  }
+  #map { height: 55vh; }
+}
