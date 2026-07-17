@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>✈ Flight Radar — リアルタイム航空機マップ</title>
+    <meta
+      name="description"
+      content="OpenSky Network のデータで航空機をリアルタイム表示するフライトレーダー風Webアプリ"
+    />
+
+    <!-- Leaflet (ローカル同梱: CDN 非依存) -->
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="topbar">
+        <div class="brand">
+          <span class="logo">✈</span>
+          <div>
+            <h1>Flight Radar</h1>
+            <p class="tagline">リアルタイム航空機マップ</p>
+          </div>
+        </div>
+
+        <div class="status" id="status">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText">接続中…</span>
+        </div>
+
+        <div class="controls">
+          <label class="switch">
+            <input type="checkbox" id="autoRefresh" checked />
+            <span>自動更新</span>
+          </label>
+          <button id="refreshBtn" title="今すぐ更新">⟳ 更新</button>
+        </div>
+      </header>
+
+      <div id="map"></div>
+
+      <div id="stats" class="stats-bar">
+        <span><strong id="planeCount">0</strong> 機を表示中</span>
+        <span class="sep">·</span>
+        <span id="lastUpdate">—</span>
+        <span class="sep">·</span>
+        <span id="dataSource">OpenSky Network</span>
+      </div>
+
+      <!-- 選択した機体の詳細パネル -->
+      <aside id="detail" class="detail hidden">
+        <button class="close" id="detailClose" aria-label="閉じる">×</button>
+        <h2 id="dCallsign">—</h2>
+        <div class="badge" id="dCountry">—</div>
+        <dl class="detail-grid">
+          <div><dt>高度</dt><dd id="dAltitude">—</dd></div>
+          <div><dt>速度</dt><dd id="dSpeed">—</dd></div>
+          <div><dt>進行方向</dt><dd id="dTrack">—</dd></div>
+          <div><dt>上昇/降下</dt><dd id="dVert">—</dd></div>
+          <div><dt>ICAO24</dt><dd id="dIcao">—</dd></div>
+          <div><dt>スコーク</dt><dd id="dSquawk">—</dd></div>
+          <div><dt>緯度</dt><dd id="dLat">—</dd></div>
+          <div><dt>経度</dt><dd id="dLon">—</dd></div>
+        </dl>
+        <a id="dExtLink" class="ext-link" href="#" target="_blank" rel="noopener"
+          >OpenSky で詳細を見る ↗</a
+        >
+      </aside>
+    </div>
+
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
