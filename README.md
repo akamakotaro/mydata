@@ -74,6 +74,18 @@ cd mach-tools && php -S 127.0.0.1:8080
 # → http://127.0.0.1:8080/flight-radar.php
 ```
 
+## おまけ: Mac スリープ防止ツール（`.command`）
+
+このリポジトリには、フライトレーダーとは独立した小物ツールとして
+**Mac のスリープを一定時間だけ防止する `.command` ファイル** を [`mac-sleep-guard/`](./mac-sleep-guard/) に置いています。
+ダブルクリックで起動し、タイマーの残り時間をリアルタイムにカウントダウン表示します。
+
+```bash
+cd mac-sleep-guard && ./sleep-guard.command 1h30m
+```
+
+詳細は [`mac-sleep-guard/README.md`](./mac-sleep-guard/README.md) を参照してください。
+
 ## ライセンス
 
 MIT
